@@ -15,6 +15,7 @@ module.exports.home =  async function (req,res){
 
     //display all the post and populate , means all the dateailsof the user is displayed too whose posts is there
     try{
+        //change :: populate the likes of each post and comments
         let posts = await Post.find({})
     .sort('-createdAt')
     .populate('user')
@@ -22,8 +23,13 @@ module.exports.home =  async function (req,res){
         path : 'comments',
         populate:{
             path : 'user'
+        },
+        populate:{
+            path : 'likes'
         }
-    });
+    }).populate('likes');
+
+
     let users = await User.find({});
     return res.render('home',{
         title : "Codiel Home",

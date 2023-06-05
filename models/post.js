@@ -15,7 +15,12 @@ const postSchema = new mongoose.Schema({
             type : mongoose.Schema.Types.ObjectId,  //object id always unique of user
             ref : 'Comment' 
         }
-    ]
+    ],
+    likes :{
+        type : mongoose.Schema.Types.ObjectId,
+        ref :'Like'
+    }
+
 },{
     timestamps : true
 });
