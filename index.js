@@ -8,9 +8,12 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal =  require('./config/passport-local-strategy');
+const passportJWT =  require('./config/passport-jwt-startegy')
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
 const MongoStore   = require('connect-mongo')(session);
 const sassMiddleware = require('node-sass-middleware');
-
+const flash = require('connect-flash');
+const customMware = require('/config/middleware')
 
 
 app.use(sassMiddleware({
@@ -22,14 +25,17 @@ app.use(sassMiddleware({
 }))
 //reading through the post request
 app.use(express.urlencoded)
+
+
 //calling the cookie parser
 app.use(cookieParser());
-
 //telling the app to use the cookie 
-app.use(express.static('./assets'));
 
-//let browser know where i will be putting the app looking out for static files
 app.use(express.static('./assets'));
+//let browser know where i will be putting the app looking out for static files
+
+//make the upload paths available to the browser
+app.use('/uploads',express.static(__dirname + '/uploads'));
 
 app.use(expressLayouts);
 //extract style and scripts from sub pages into the layout
@@ -69,6 +75,9 @@ app.use(passport.session);
 
 app.use(passport.setAuthenticatedUser);
 //this above will go to passport local startegy and excute the abpve fucntion for authentication
+
+app.use(flash()); //used only after the session , helps flashing the messge
+app.use(customMware.setFlash);
 
 //use express router
 app.use('/', require('./routes'));

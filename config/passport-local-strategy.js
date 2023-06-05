@@ -6,16 +6,22 @@ const User = require('../models/user');
 
 //reuire the user, now need to tell passport to use this local authenticatoin 
 passport.use(new LocalStrategy({
-    usernameField : 'email'
+    usernameField : 'email',
+    passReqToCallback : true
     },
     //email and password are passed on
     //done is my callback function which is reporting to the passport js
-    function(email,password,done){
+    function(req,email,password,done){
         //find the user an establish the identity
         User.findOne({email:email},function(err,user){
-            if(err){ console.log("error in finding the user --> Passport"); return done(err);}
+            if(err){
+            //    console.log("error in finding the user --> Passport"); 
+                req.flash('error',err);
+                return done(err);
+            }
             if(!user || user.password!= password){
-                console.log("Invaldi Username/Password");
+                // console.log("Invaldi Username/Password");
+                req.flash('error','Invalid Username/Password')
                 return done(null,false);
             }
             return done(null,user);
