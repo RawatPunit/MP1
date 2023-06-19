@@ -1,5 +1,6 @@
 const express  = require('express');
-const env = require('./config/environment')
+const env = require('./config/environment');
+const mlogger = require('morgan')
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 8000;
@@ -24,15 +25,18 @@ chatServer.listen(5000);
 console.log("chat server is listening on port 5000");
 const path = require('path');
 
+
+if(env.name == development){
 app.use(sassMiddleware({
     // src : '/assets/scss',
     // dest : '/assets/css',                had to remove due to development and production changes
-    src : path.join(__dirname, env.asset_path,'scss'),
-    dest : path.join(__dirname, env.asset_path,'css'),
-    debug : true,
-    outputStyle : 'extended',
-    prefix : '/css'
-}))
+        src : path.join(__dirname, env.asset_path,'scss'),
+        dest : path.join(__dirname, env.asset_path,'css'),
+        debug : true,
+        outputStyle : 'extended',
+        prefix : '/css'
+    }));
+}
 //reading through the post request
 app.use(express.urlencoded)
 
