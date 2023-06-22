@@ -1,6 +1,7 @@
 const express  = require('express');
 const env = require('./config/environment');
-const mlogger = require('morgan')
+const logger = require('morgan');
+require('./config/view-helpers')(app);
 const cookieParser = require('cookie-parser');
 const app = express();
 const port = 8000;
@@ -24,6 +25,7 @@ const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(5000);
 console.log("chat server is listening on port 5000");
 const path = require('path');
+const environment = require('./config/environment');
 
 
 if(env.name == development){
@@ -50,6 +52,8 @@ app.use(express.static(env.asset_path));
 
 //make the upload paths available to the browser
 app.use('/uploads',express.static(__dirname + '/uploads'));
+
+app.use(logger(environment.morgan.mode, env.morgan.options));
 
 app.use(expressLayouts);
 //extract style and scripts from sub pages into the layout
