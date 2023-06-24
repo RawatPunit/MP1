@@ -4,18 +4,18 @@ const path = require('path');
 
 const logDirectory = path.join(__dirname,'../production_logs');
 //if log directpry exists then perfect other wise creat it
-fs.existsSync(logDirectory)|| fs.mkdirSync(logDirectory);
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 const accessLogStream = rfs('access.log',{
     interval : '1d',
-    path : logdirectory
+    path : logDirectory
 });
 
 const development = {
     name : 'development',
     asset_path: '/assets',
     session_cookie_key : 'Something',
-    db : 'codiel_development',
+    db : 'codeial_development',
     smtp : {
         service : 'gmail',
         host: 'smtp.google.com',
